@@ -153,31 +153,29 @@ export default class LoginView extends PureComponent {
       return renderLoading();
     }
 
-    if (loaded) {
-      return (
-        <View style={containerStyle}>
-          {renderExitButton(renderExit)}
-          <WebView
-            userAgent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15"
-            incognito
-            {...rest}
-            originWhitelist={["*"]} // refer: https://github.com/facebook/react-native/issues/20917
-            source={{ uri }}
-            onNavigationStateChange={this.onNavigationStateChangeAsync}
-            onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
-            renderLoading={renderLoading}
-            renderError={renderError}
-            startInLoadingState
-            onLoad={() => this.setRenderExit(true)}
-            onLoadStart={() => this.setRenderExit(false)}
-            onError={this.onWebViewError}
-            androidLayerType="hardware"
-            ref={c => {
-              this.webView = c;
-            }}
-          />
-        </View>
-      );
-    }
+    return (
+      <View style={containerStyle}>
+        {renderExitButton(renderExit)}
+        <WebView
+          userAgent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15"
+          incognito
+          {...rest}
+          originWhitelist={["*"]} // refer: https://github.com/facebook/react-native/issues/20917
+          source={{ uri }}
+          onNavigationStateChange={this.onNavigationStateChangeAsync}
+          onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
+          renderLoading={renderLoading}
+          renderError={renderError}
+          startInLoadingState
+          onLoad={() => this.setRenderExit(true)}
+          onLoadStart={() => this.setRenderExit(false)}
+          onError={this.onWebViewError}
+          androidLayerType="hardware"
+          ref={c => {
+            this.webView = c;
+          }}
+        />
+      </View>
+    );
   }
 }
