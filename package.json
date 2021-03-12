@@ -53,6 +53,7 @@
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "enzyme-to-json": "^3.4.4",
+    "eslint": "^7.21.0",
     "jest": "^26.6.3",
     "jest-fetch-mock": "^3.0.3",
     "npm-check": "^5.9.2",
@@ -64,7 +65,5 @@
     "react-test-renderer": "^16.13.1",
     "tern": "^0.24.3"
   },
-  "dependencies": {
-    "eslint": "^7.19.0"
-  }
+  "dependencies": {}
 }
