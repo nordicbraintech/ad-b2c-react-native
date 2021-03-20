@@ -41,6 +41,12 @@
     "url": "https://github.com/GSingh01/ad-b2c-react-native/issues"
   },
   "homepage": "https://github.com/GSingh01/ad-b2c-react-native#readme",
+  "resolutions": {
+    "dot-prop": "^5.1.1",
+    "lodash": "^4.17.21",
+    "node-fetch": "^2.6.1",
+    "node-notifier": "^9.0.0"
+  },
   "peerDependencies": {
     "react": "^16.8.3",
     "react-native-webview": "^11.0.3"
