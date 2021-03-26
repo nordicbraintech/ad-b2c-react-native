@@ -3,10 +3,7 @@
   "version": "1.1.5",
   "description": "React Native Azure B2C auth using JS. This doesn't require eject from expo.",
   "main": "index.js",
-  "files": [
-    "index.js",
-    "src"
-  ],
+  "files": ["index.js", "src"],
   "scripts": {
     "test": "jest --coverage",
     "upgrade-interactive": "npm-check --update"
@@ -19,28 +16,24 @@
     "transformIgnorePatterns": [
       "/node_modules/(?!react-native|react-clone-referenced-element|react-navigation)"
     ],
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ],
+    "snapshotSerializers": ["enzyme-to-json/serializer"],
     "automock": false,
-    "setupFiles": [
-      "./setupJest.js"
-    ]
+    "setupFiles": ["./setupJest.js"]
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GSingh01/ad-b2c-react-native.git"
   },
-  "keywords": [
-    "react native b2c",
-    "b2c ejectless"
-  ],
+  "keywords": ["react native b2c", "b2c ejectless"],
   "author": "Guriqbal Singh",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/GSingh01/ad-b2c-react-native/issues"
   },
   "homepage": "https://github.com/GSingh01/ad-b2c-react-native#readme",
+  "resolutions": {
+    "plist": ">=3.0.2"
+  },
   "peerDependencies": {
     "react": "^16.8.3",
     "react-native-webview": "^11.0.3"
