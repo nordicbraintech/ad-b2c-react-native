@@ -17,6 +17,7 @@ describe("LoginView", () => {
     onFail: jest.fn(),
     secureStore: jest.fn(),
     renderExitButton: jest.fn(),
+    onError: jest.fn(),
     renderLoading: () => <Text>loading</Text>
   };
 
@@ -43,6 +44,17 @@ describe("LoginView", () => {
     expect(adService.init).toHaveBeenCalledTimes(1);
     expect(adService.init).toHaveBeenCalledWith(props);
   });
+  //
+  //  describe("onLoad", () => {
+  //    test("calls setRenderExit", () => {
+  //      const wrapper = shallow(<LoginView {...props} />);
+  //      const instance = wrapper.instance();
+  //      console.log(instance);
+  //      instance.onLoadStart();
+  //      jest.spyOn(instance, "setRenderExit");
+  //      expect(instance.setRenderExit).toHaveBeenCalledTimes(1);
+  //    });
+  //  });
 
   describe("componentDidMount", () => {
     test("calls adService.isAuthenticAsync", async () => {
@@ -157,6 +169,20 @@ describe("LoginView", () => {
     const wrapper = shallow(<LoginView {...props} />);
     const instance = wrapper.instance();
     Test_HandleFlowResultAsync(instance.onNavigationStateChangeAsync, instance);
+  });
+
+  describe("setRenderExit", () => {
+    const wrapper = shallow(<LoginView {...props} />);
+    const instance = wrapper.instance();
+    describe("With render exit done false", () => {
+      instance.setRenderExit(false);
+      expect(instance.state.renderExit).toBe(false);
+    });
+    describe("With render exit done true", () => {
+      instance.setState({ renderExitDone: true });
+      instance.setRenderExit(true);
+      expect(instance.state.renderExit).toBe(false);
+    });
   });
 
   describe("onShouldStartLoadWithRequest", () => {
