@@ -16,7 +16,8 @@ describe("LoginView", () => {
     onSuccess: jest.fn(),
     onFail: jest.fn(),
     secureStore: jest.fn(),
-    renderLoading: () => <Text>loading</Text>,
+    renderExitButton: jest.fn(),
+    renderLoading: () => <Text>loading</Text>
   };
 
   test("renders correctly when loading", () => {
@@ -90,7 +91,10 @@ describe("LoginView", () => {
 
       expect(props.onSuccess).not.toHaveBeenCalled();
       expect(instance.setState).toHaveBeenCalledTimes(1);
-      expect(instance.setState).toHaveBeenCalledWith({ loaded: true });
+      expect(instance.setState).toHaveBeenCalledWith({
+        loaded: true,
+        renderExitDone: false
+      });
     });
 
     test("sets loaded state", async () => {
@@ -165,7 +169,7 @@ describe("LoginView", () => {
       beforeEach(() => {
         adService.getLoginFlowResult.mockReturnValue({ requestType: "ignore" });
         instance.webView = {
-          stopLoading: jest.fn(),
+          stopLoading: jest.fn()
         };
       });
 
@@ -186,7 +190,7 @@ describe("LoginView", () => {
       beforeEach(() => {
         adService.getLoginFlowResult.mockReturnValue({ requestType: "code" });
         instance.webView = {
-          stopLoading: jest.fn(),
+          stopLoading: jest.fn()
         };
       });
 
@@ -199,9 +203,12 @@ describe("LoginView", () => {
         var result = instance.onShouldStartLoadWithRequest({ url: "" });
         expect(result).toBe(false);
       });
-      
+
       test("returns true", () => {
-        var result = instance.onShouldStartLoadWithRequest({ url: "", loading: true });
+        var result = instance.onShouldStartLoadWithRequest({
+          url: "",
+          loading: true
+        });
         expect(result).toBe(true);
       });
     });
@@ -211,10 +218,10 @@ describe("LoginView", () => {
 
       beforeEach(() => {
         adService.getLoginFlowResult.mockReturnValue({
-          requestType: "passwordReset",
+          requestType: "passwordReset"
         });
         instance.webView = {
-          stopLoading: jest.fn(),
+          stopLoading: jest.fn()
         };
       });
 
@@ -234,10 +241,10 @@ describe("LoginView", () => {
 
       beforeEach(() => {
         adService.getLoginFlowResult.mockReturnValue({
-          requestType: "cancelled",
+          requestType: "cancelled"
         });
         instance.webView = {
-          stopLoading: jest.fn(),
+          stopLoading: jest.fn()
         };
       });
 
@@ -258,7 +265,7 @@ describe("LoginView", () => {
       beforeEach(() => {
         adService.getLoginFlowResult.mockReturnValue({ requestType: "other" });
         instance.webView = {
-          stopLoading: jest.fn(),
+          stopLoading: jest.fn()
         };
       });
 
@@ -281,7 +288,7 @@ describe("LoginView", () => {
 
       beforeEach(() => {
         adService.getLoginFlowResult.mockReturnValue({
-          requestType: "passwordReset",
+          requestType: "passwordReset"
         });
         instance.setState.mockClear();
       });
@@ -323,7 +330,7 @@ describe("LoginView", () => {
 
       beforeEach(() => {
         adService.getLoginFlowResult.mockReturnValue({
-          requestType: "cancelled",
+          requestType: "cancelled"
         });
         instance.setState.mockClear();
       });
@@ -425,7 +432,7 @@ describe("LoginView", () => {
         const error = "test invalid message";
         adService.fetchAndSetTokenAsync.mockResolvedValue({
           isValid: false,
-          data: error,
+          data: error
         });
 
         await callbackAsync({ url: "doesNotMatter" });
