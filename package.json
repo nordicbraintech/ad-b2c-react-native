@@ -32,7 +32,13 @@
   },
   "homepage": "https://github.com/GSingh01/ad-b2c-react-native#readme",
   "resolutions": {
-    "plist": ">=3.0.2"
+    "plist": ">=3.0.2",
+    "dot-prop": "^5.1.1",
+    "lodash": "^4.17.21",
+    "node-fetch": "^2.6.1",
+    "node-notifier": "^9.0.0",
+    "ua-parser-js": "^0.7.24",
+    "hosted-git-info": "^3.0.8"
   },
   "peerDependencies": {
     "react": "^16.8.3",
