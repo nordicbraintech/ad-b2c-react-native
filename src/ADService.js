@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { RequestType } from "./Constants";
+import { RequestType, azureErrors } from "./Constants";
 import Result from "./Result";
 
 class ADService {
@@ -61,6 +61,17 @@ class ADService {
         this.loginPolicy,
         true
       );
+
+      /*
+       * If wrong endpoint try with reset password endpoint
+       */
+      if (result.data.match(azureErrors.wrongEndpoint)) {
+        result = await this.fetchAndSetTokenAsync(
+          this.tokenResult.refreshToken,
+          this.passwordResetPolicy,
+          true
+        );
+      }
 
       if (!result.isValid) {
         return result;
