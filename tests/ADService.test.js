@@ -1,4 +1,5 @@
 import { ADService } from "../src/ADService";
+import { azureErrors } from "../src/Constants";
 
 let adService;
 const props = {
@@ -17,6 +18,9 @@ const props = {
     idToken: "idToken",
     refresh: "refreshToken",
     expiresOn: new Date().getTime() / 1000 - 10000
+  },
+  tokenResult: {
+    refreshToken: "refreshToken"
   }
 };
 
@@ -139,6 +143,57 @@ describe.only("ADService", () => {
       );
     });
 
+    test("Call fetch and handle wrong endpoint result", async () => {
+      const response1 = {
+        ok: false,
+        json: function() {
+          return {
+            error: { message: azureErrors.wrongEndpoint },
+            error_description: azureErrors.wrongEndpoint
+          };
+        }
+      };
+      const response2 = {
+        ok: true,
+        json: function() {
+          return {
+            token_type: "tokenType",
+            access_token: "accessToken",
+            id_token: "",
+            refresh_token: "refreshToken",
+            expires_on: new Date().getTime() / 1000 - 10000
+          };
+        }
+      };
+      fetch
+        .mockResolvedValueOnce(response1, {
+          status: 200
+        })
+        .mockResolvedValueOnce(response2, {
+          status: 200
+        });
+
+      adService.init({
+        ...props,
+        tokenState: {
+          tokenType: "tokenType",
+          access: "accessToken",
+          idToken: "idToken",
+          refresh: "testRefreshToken",
+          expiresOn: new Date().getTime() / 1000 - 10000
+        }
+      });
+
+      // Store token state and verify token is invalid
+      expect(await adService.isAuthenticAsync()).toEqual(false);
+      const result = await adService.getAccessTokenAsync();
+      expect(result).toEqual({
+        isValid: true,
+        data: "tokenType accessToken"
+      });
+      expect(fetch).toHaveBeenCalledTimes(2);
+    });
+
     test("Call fetch and handle invalid result", async () => {
       const error = "Not ok test";
       const jsonMock = jest.fn();
@@ -235,6 +290,7 @@ describe.only("ADService", () => {
     });
 
     test("calls secureStore.setItemAsync with correct params", async () => {
+      expect(props.setTokenState).toHaveBeenCalledTimes(1);
       const fetchResult = {
         token_type: "testType",
         access_token: "testAccessToken",
@@ -246,8 +302,8 @@ describe.only("ADService", () => {
 
       await adService.fetchAndSetTokenAsync("testCode");
 
-      expect(props.setTokenState).toHaveBeenCalledTimes(1);
-      expect(props.setTokenState).toHaveBeenCalledWith({
+      expect(props.setTokenState).toHaveBeenCalledTimes(2);
+      expect(props.setTokenState).lastCalledWith({
         tokenType: fetchResult.token_type,
         access: fetchResult.access_token,
         refresh: fetchResult.refresh_token,

@@ -56,7 +56,7 @@ class ADService {
 
   getAccessTokenAsync = async () => {
     if (!this._isTokenValid(this.tokenResult)) {
-      const result = await this.fetchAndSetTokenAsync(
+      let result = await this.fetchAndSetTokenAsync(
         this.tokenResult.refreshToken,
         this.loginPolicy,
         true
