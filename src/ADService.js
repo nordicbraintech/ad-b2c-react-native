@@ -55,27 +55,33 @@ class ADService {
     new Date().getTime() < tokenResult.expiresOn * 1000;
 
   getAccessTokenAsync = async () => {
-    if (!this._isTokenValid(this.tokenResult)) {
-      let result = await this.fetchAndSetTokenAsync(
-        this.tokenResult.refreshToken,
-        this.loginPolicy,
-        true
-      );
-
-      /*
-       * If wrong endpoint try with reset password endpoint
-       */
-      if (result.data.match(azureErrors.wrongEndpoint)) {
-        result = await this.fetchAndSetTokenAsync(
+    try {
+      // Additional is valid to store result from second request
+      let isValid = false;
+      if (!this._isTokenValid(this.tokenResult)) {
+        const result = await this.fetchAndSetTokenAsync(
           this.tokenResult.refreshToken,
-          this.passwordResetPolicy,
+          this.loginPolicy,
           true
         );
-      }
 
-      if (!result.isValid) {
-        return result;
+        /*
+         * If wrong endpoint try with reset password endpoint
+         */
+        if (result.data && result.data.match("AADB2C90088")) {
+          const result2 = await this.fetchAndSetTokenAsync(
+            this.tokenResult.refreshToken,
+            this.passwordResetPolicy,
+            true
+          );
+          isValid = result2.isValid;
+        }
+        if (!result.isValid && !isValid) {
+          return result;
+        }
       }
+    } catch (e) {
+      return Result(false, e.message);
     }
 
     return Result(
