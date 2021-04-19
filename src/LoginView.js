@@ -146,10 +146,12 @@ export default class LoginView extends PureComponent {
       renderExitButton,
       onFail,
       containerStyle,
+      tokenState,
       ...rest
     } = this.props;
 
-    if (!loaded) {
+    // If there exists a refresh token to not show the login screen
+    if (!loaded || tokenState.refresh) {
       return renderLoading();
     }
 
