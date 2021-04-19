@@ -2,29 +2,30 @@ import { ADService } from "../src/ADService";
 import { azureErrors } from "../src/Constants";
 
 let adService;
-const props = {
-  tenant: "testtenant",
-  appId: "testId",
-  loginPolicy: "testloginPolicy",
-  passwordResetPolicy: "testPasswordResetPolicy",
-  profileEditPolicy: "testProfileEditPolicy",
-  redirectURI: "test redirectURI",
-  scope: "testId offline_access",
-  setTokenState: jest.fn(),
-  resetTokenState: jest.fn(),
-  tokenState: {
-    tokenType: "tokenType",
-    access: "accessToken",
-    idToken: "idToken",
-    refresh: "refreshToken",
-    expiresOn: new Date().getTime() / 1000 - 10000
-  },
-  tokenResult: {
-    refreshToken: "refreshToken"
-  }
-};
+let props;
 
 beforeEach(() => {
+  props = {
+    tenant: "testtenant",
+    appId: "testId",
+    loginPolicy: "testloginPolicy",
+    passwordResetPolicy: "testPasswordResetPolicy",
+    profileEditPolicy: "testProfileEditPolicy",
+    redirectURI: "test redirectURI",
+    scope: "testId offline_access",
+    setTokenState: jest.fn(),
+    resetTokenState: jest.fn(),
+    tokenState: {
+      tokenType: "tokenType",
+      access: "accessToken",
+      idToken: "idToken",
+      refresh: "refreshToken",
+      expiresOn: new Date().getTime() / 1000 - 10000
+    },
+    tokenResult: {
+      refreshToken: "refreshToken"
+    }
+  };
   adService = new ADService();
   adService.init(props);
   fetch.resetMocks();
@@ -290,7 +291,6 @@ describe.only("ADService", () => {
     });
 
     test("calls secureStore.setItemAsync with correct params", async () => {
-      expect(props.setTokenState).toHaveBeenCalledTimes(1);
       const fetchResult = {
         token_type: "testType",
         access_token: "testAccessToken",
@@ -302,8 +302,8 @@ describe.only("ADService", () => {
 
       await adService.fetchAndSetTokenAsync("testCode");
 
-      expect(props.setTokenState).toHaveBeenCalledTimes(2);
-      expect(props.setTokenState).lastCalledWith({
+      expect(props.setTokenState).toHaveBeenCalledTimes(1);
+      expect(props.setTokenState).toHaveBeenCalledWith({
         tokenType: fetchResult.token_type,
         access: fetchResult.access_token,
         refresh: fetchResult.refresh_token,

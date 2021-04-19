@@ -59,7 +59,7 @@ class ADService {
       // Additional is valid to store result from second request
       let isValid = false;
       if (!this._isTokenValid(this.tokenResult)) {
-        const result = await this.fetchAndSetTokenAsync(
+        const resultSignin = await this.fetchAndSetTokenAsync(
           this.tokenResult.refreshToken,
           this.loginPolicy,
           true
@@ -68,16 +68,19 @@ class ADService {
         /*
          * If wrong endpoint try with reset password endpoint
          */
-        if (result.data && result.data.match("AADB2C90088")) {
-          const result2 = await this.fetchAndSetTokenAsync(
+        if (
+          resultSignin.data &&
+          resultSignin.data.match(azureErrors.wrongEndpoint)
+        ) {
+          const resultReset = await this.fetchAndSetTokenAsync(
             this.tokenResult.refreshToken,
             this.passwordResetPolicy,
             true
           );
-          isValid = result2.isValid;
+          isValid = resultReset.isValid;
         }
-        if (!result.isValid && !isValid) {
-          return result;
+        if (!resultSignin.isValid && !isValid) {
+          return resultSignin;
         }
       }
     } catch (e) {
