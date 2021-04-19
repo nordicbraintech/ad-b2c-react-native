@@ -65,9 +65,7 @@ class ADService {
           true
         );
 
-        /*
-         * If wrong endpoint try with reset password endpoint
-         */
+        // If wrong endpoint try with reset password endpoint
         if (
           resultSignin.data &&
           resultSignin.data.match(azureErrors.wrongEndpoint)
@@ -79,6 +77,10 @@ class ADService {
           );
           isValid = resultReset.isValid;
         }
+
+        // Only return result if token is invalid.
+        // If token is valid it is not returned in the result response from the fetch function.
+        // (see end of fetchAndSetTokenAsync)
         if (!resultSignin.isValid && !isValid) {
           return resultSignin;
         }
@@ -87,6 +89,7 @@ class ADService {
       return Result(false, e.message);
     }
 
+    // Collect and return access token
     return Result(
       true,
       `${this.tokenResult.tokenType} ${this.tokenResult.accessToken}`
@@ -134,6 +137,7 @@ class ADService {
       }
 
       await this._setTokenDataAsync(response);
+      // Returns only true response of token is valid after setting the internal state.
       return Result(true);
     } catch (error) {
       return Result(false, error.message);
