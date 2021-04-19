@@ -1,26 +1,31 @@
 import { ADService } from "../src/ADService";
+import { azureErrors } from "../src/Constants";
 
 let adService;
-const props = {
-  tenant: "testtenant",
-  appId: "testId",
-  loginPolicy: "testloginPolicy",
-  passwordResetPolicy: "testPasswordResetPolicy",
-  profileEditPolicy: "testProfileEditPolicy",
-  redirectURI: "test redirectURI",
-  scope: "testId offline_access",
-  setTokenState: jest.fn(),
-  resetTokenState: jest.fn(),
-  tokenState: {
-    tokenType: "tokenType",
-    access: "accessToken",
-    idToken: "idToken",
-    refresh: "refreshToken",
-    expiresOn: new Date().getTime() / 1000 - 10000
-  }
-};
+let props;
 
 beforeEach(() => {
+  props = {
+    tenant: "testtenant",
+    appId: "testId",
+    loginPolicy: "testloginPolicy",
+    passwordResetPolicy: "testPasswordResetPolicy",
+    profileEditPolicy: "testProfileEditPolicy",
+    redirectURI: "test redirectURI",
+    scope: "testId offline_access",
+    setTokenState: jest.fn(),
+    resetTokenState: jest.fn(),
+    tokenState: {
+      tokenType: "tokenType",
+      access: "accessToken",
+      idToken: "idToken",
+      refresh: "refreshToken",
+      expiresOn: new Date().getTime() / 1000 - 10000
+    },
+    tokenResult: {
+      refreshToken: "refreshToken"
+    }
+  };
   adService = new ADService();
   adService.init(props);
   fetch.resetMocks();
@@ -137,6 +142,57 @@ describe.only("ADService", () => {
           method: "POST"
         }
       );
+    });
+
+    test("Call fetch and handle wrong endpoint result", async () => {
+      const response1 = {
+        ok: false,
+        json: function() {
+          return {
+            error: { message: azureErrors.wrongEndpoint },
+            error_description: azureErrors.wrongEndpoint
+          };
+        }
+      };
+      const response2 = {
+        ok: true,
+        json: function() {
+          return {
+            token_type: "tokenType",
+            access_token: "accessToken",
+            id_token: "",
+            refresh_token: "refreshToken",
+            expires_on: new Date().getTime() / 1000 - 10000
+          };
+        }
+      };
+      fetch
+        .mockResolvedValueOnce(response1, {
+          status: 200
+        })
+        .mockResolvedValueOnce(response2, {
+          status: 200
+        });
+
+      adService.init({
+        ...props,
+        tokenState: {
+          tokenType: "tokenType",
+          access: "accessToken",
+          idToken: "idToken",
+          refresh: "testRefreshToken",
+          expiresOn: new Date().getTime() / 1000 - 10000
+        }
+      });
+
+      // Store token state and verify token is invalid
+      expect(await adService.isAuthenticAsync()).toEqual(false);
+      const result = await adService.getAccessTokenAsync();
+      expect(result).toEqual({
+        isValid: true,
+        data: "tokenType accessToken"
+      });
+      expect(fetch).toHaveBeenCalledTimes(2);
     });
 
     test("Call fetch and handle invalid result", async () => {

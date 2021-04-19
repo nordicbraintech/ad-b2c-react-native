@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { RequestType } from "./Constants";
+import { RequestType, azureErrors } from "./Constants";
 import Result from "./Result";
 
 class ADService {
@@ -55,18 +55,41 @@ class ADService {
     new Date().getTime() < tokenResult.expiresOn * 1000;
 
   getAccessTokenAsync = async () => {
-    if (!this._isTokenValid(this.tokenResult)) {
-      const result = await this.fetchAndSetTokenAsync(
-        this.tokenResult.refreshToken,
-        this.loginPolicy,
-        true
-      );
+    try {
+      // Additional is valid to store result from second request
+      let isValid = false;
+      if (!this._isTokenValid(this.tokenResult)) {
+        const resultSignin = await this.fetchAndSetTokenAsync(
+          this.tokenResult.refreshToken,
+          this.loginPolicy,
+          true
+        );
 
-      if (!result.isValid) {
-        return result;
+        // If wrong endpoint try with reset password endpoint
+        if (
+          resultSignin.data &&
+          resultSignin.data.match(azureErrors.wrongEndpoint)
+        ) {
+          const resultReset = await this.fetchAndSetTokenAsync(
+            this.tokenResult.refreshToken,
+            this.passwordResetPolicy,
+            true
+          );
+          isValid = resultReset.isValid;
+        }
+
+        // Only return result if token is invalid.
+        // If token is valid it is not returned in the result response from the fetch function.
+        // (see end of fetchAndSetTokenAsync)
+        if (!resultSignin.isValid && !isValid) {
+          return resultSignin;
+        }
       }
+    } catch (e) {
+      return Result(false, e.message);
     }
 
+    // Collect and return access token
     return Result(
       true,
       `${this.tokenResult.tokenType} ${this.tokenResult.accessToken}`
@@ -114,6 +137,7 @@ class ADService {
       }
 
       await this._setTokenDataAsync(response);
+      // Returns only true response of token is valid after setting the internal state.
       return Result(true);
     } catch (error) {
       return Result(false, error.message);
