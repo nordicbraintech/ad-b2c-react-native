@@ -28,6 +28,9 @@ export default class LoginView extends PureComponent {
   }
   _backHandler() {
     const { uri } = this.state;
+    // Check if WebView reference exists to avoid nullpointer expection.
+    // Error appens if backPress is pressed before the webView ref has been established.
+    // Return true anyways to avoid exiting the app. Check BackHandler doc for reference.
     if (this.webView) {
       if (uri == adService.getPasswordResetURI()) {
         this._handleFlowResultAsync({ requestType: "cancelled" }, uri);
