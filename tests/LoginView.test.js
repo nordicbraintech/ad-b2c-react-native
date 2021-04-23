@@ -17,6 +17,7 @@ describe("LoginView", () => {
     onFail: jest.fn(),
     secureStore: jest.fn(),
     renderExitButton: jest.fn(),
+    tokenState: { refresh: "" },
     onError: jest.fn(),
     renderLoading: () => <Text>loading</Text>
   };

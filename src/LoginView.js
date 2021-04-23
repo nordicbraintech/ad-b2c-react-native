@@ -28,10 +28,15 @@ export default class LoginView extends PureComponent {
   }
   _backHandler() {
     const { uri } = this.state;
-    if (uri == adService.getPasswordResetURI()) {
-      this._handleFlowResultAsync({ requestType: "cancelled" }, uri);
+    // Check if WebView reference exists to avoid nullpointer expection.
+    // Error appens if backPress is pressed before the webView ref has been established.
+    // Return true anyways to avoid exiting the app. Check BackHandler doc for reference.
+    if (this.webView) {
+      if (uri == adService.getPasswordResetURI()) {
+        this._handleFlowResultAsync({ requestType: "cancelled" }, uri);
+      }
+      this.webView.goBack();
     }
-    this.webView.goBack();
 
     return true;
   }
@@ -146,10 +151,12 @@ export default class LoginView extends PureComponent {
       renderExitButton,
       onFail,
       containerStyle,
+      tokenState,
       ...rest
     } = this.props;
 
-    if (!loaded) {
+    // If there exists a refresh token to not show the login screen
+    if (!loaded || tokenState.refresh) {
       return renderLoading();
     }
 
