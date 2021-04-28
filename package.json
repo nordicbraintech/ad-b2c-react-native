@@ -37,12 +37,13 @@
     "lodash": "^4.17.21",
     "node-fetch": "^2.6.1",
     "node-notifier": "^9.0.0",
+    "plist": ">=3.0.2",
     "ua-parser-js": "^0.7.24",
     "hosted-git-info": "^3.0.8"
   },
   "peerDependencies": {
     "react": "^16.8.3",
-    "react-native-webview": "^11.0.3"
+    "react-native-webview": "^11.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

@@ -6827,9 +6827,9 @@ react-is@^17.0.1:
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
 react-native-webview@^11.0.3:
-  version "11.2.0"
-  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.2.0.tgz#6ae73b17743c25c6fff4ff36a060ba52597fccd9"
-  integrity sha512-ZmJlCnBIoh4/d8Bd4St7GPTlPxLs3reHcRdTeOhPKjwuqE194BTfwie5t0QO+l0C1ms2RXrcLrUYV3uBbgpCkA==
+  version "11.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.4.2.tgz#5fe8867135e7395b16c08e8d26bc8064b5c0dfac"
+  integrity sha512-reGWtlFCQCgZEROy0IJaI5iMhrhFzedNIFlj0d6eo0K6T91eeKaoDr24ebBvqmeemOCj0ZYtzX19qiInRznhLA==
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
