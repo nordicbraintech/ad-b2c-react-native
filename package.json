@@ -3,10 +3,12 @@
   "version": "1.1.5",
   "description": "React Native Azure B2C auth using JS. This doesn't require eject from expo.",
   "main": "index.js",
-  "files": ["index.js", "src"],
+  "files": [
+    "index.js",
+    "src"
+  ],
   "scripts": {
-    "test": "jest --coverage",
-    "upgrade-interactive": "npm-check --update"
+    "test": "jest --coverage"
   },
   "jest": {
     "preset": "react-native",
@@ -16,15 +18,22 @@
     "transformIgnorePatterns": [
       "/node_modules/(?!react-native|react-clone-referenced-element|react-navigation)"
     ],
-    "snapshotSerializers": ["enzyme-to-json/serializer"],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
     "automock": false,
-    "setupFiles": ["./setupJest.js"]
+    "setupFiles": [
+      "./setupJest.js"
+    ]
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GSingh01/ad-b2c-react-native.git"
   },
-  "keywords": ["react native b2c", "b2c ejectless"],
+  "keywords": [
+    "react native b2c",
+    "b2c ejectless"
+  ],
   "author": "Guriqbal Singh",
   "license": "MIT",
   "bugs": {
@@ -32,12 +41,10 @@
   },
   "homepage": "https://github.com/GSingh01/ad-b2c-react-native#readme",
   "resolutions": {
-    "plist": ">=3.0.2",
     "dot-prop": "^5.1.1",
     "lodash": "^4.17.21",
     "node-fetch": "^2.6.1",
     "node-notifier": "^9.0.0",
-    "plist": ">=3.0.2",
     "ua-parser-js": "^0.7.24",
     "hosted-git-info": "^3.0.8"
   },
@@ -56,7 +63,6 @@
     "eslint": "^7.21.0",
     "jest": "^26.6.3",
     "jest-fetch-mock": "^3.0.3",
-    "npm-check": "^5.9.2",
     "react": "^16.13.1",
     "react-addons-test-utils": "^15.6.2",
     "react-dom": "^16.13.1",
