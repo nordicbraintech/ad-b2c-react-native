@@ -36,12 +36,12 @@ class ADService {
   };
 
   isAuthenticAsync = async () => {
-    const { tokenType, access, refresh, expiresOn } = this.tokenState;
+    const { tokenType, access, id, refresh, expiresOn } = this.tokenState;
 
     this.tokenResult = {
       tokenType: tokenType,
       accessToken: access,
-      idToken: "",
+      idToken: id,
       refreshToken: refresh,
       expiresOn: parseInt(expiresOn)
     };
@@ -156,6 +156,7 @@ class ADService {
 
     this.setTokenState({
       tokenType: res.token_type,
+			id: res.id_token,
       access: res.access_token,
       refresh: res.refresh_token,
       expiresOn: res.expires_on.toString()
