@@ -34,7 +34,7 @@ We change the email by sending a PATCH request.
 Find the Object_ID of the user you want to change in Users pane in Azure AD B2C. The list can be searched by typing the full email.
 Find the New_Mail and insert the Token_String in the following call:
 
-´curl -X PATCH 'https://graph.microsoft.com/v1.0/users/Object_ID' \
+`curl -X PATCH 'https://graph.microsoft.com/v1.0/users/Object_ID' \
  -H 'Content-Type: application/json'
      -H 'Accept: application/json'
 --header 'Authorization: Bearer Token_String \
@@ -46,7 +46,7 @@ Find the New_Mail and insert the Token_String in the following call:
             "issuerAssignedId": "New_Mail"
         }
     ]
-}' ´
+}'` 
 
 NB: Some formating can be off when copy/pasting the above call. Check all the apostrophes ‘’ and “” symbols.
 
