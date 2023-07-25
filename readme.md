@@ -7,6 +7,53 @@ Thanks to https://github.com/sonyarouje/react-native-ad-b2c and https://github.c
 
 Feel free to contribute or sponsor. :)
 
+## Guide to change user email in Brain Twin
+
+The following is meant as a guide to change user emails in the Azure B2C tenant (Brain Twin).
+
+
+Register a new App in App registration in AD B2C Tenant. Note the App_Client_ID for later
+Give the new registered app permission to read/write all users by adding Microsoft Graph API permission (given with Application rights and not delegated)
+Create a new secret (in Certs & secrets pane). Note the Secret_Value for later
+Find the application endpoint with (Tenant_Obj_ID)
+Use the newly registered app to get a token from BT endpoint by calling from a terminal:
+
+
+`curl --location --request POST 'https://login.microsoftonline.com/Tenant_Obj_ID/oauth2/v2.0/token' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'client_id=App_Client_ID' \
+--data-urlencode 'scope=https://graph.microsoft.com/.default' \
+--data-urlencode 'client_secret=Secret_Value' \
+--data-urlencode 'grant_type=client_credentials'`
+
+This should print a bearer token "ey … ….. … ."
+
+Copy token and insert in next step
+
+We change the email by sending a PATCH request.
+Find the Object_ID of the user you want to change in Users pane in Azure AD B2C. The list can be searched by typing the full email.
+Find the New_Mail and insert the Token_String in the following call:
+
+´curl -X PATCH 'https://graph.microsoft.com/v1.0/users/Object_ID" \
+ -H 'Content-Type: application/json'
+     -H 'Accept: application/json'
+--header 'Authorization: Bearer Token_String \
+--data '{
+    "identities": [
+        {
+            "signInType": "emailAddress",
+            "issuer": "devbraintwin.onmicrosoft.com",
+            "issuerAssignedId": "New_Mail"
+        }
+    ]
+}'´
+
+NB: Some formating can be off when copy/pasting the above call. Check all the apostrophes ‘’ and “” symbols.
+
+This should change the email address for the user. Can also be checked by trying to log in with the new user in BT.
+
+To clean up you should probably withdraw the permisions and delete the registered application we created in step 1.
+
 ## Installation
 
 > Don't forget to **install peer dependencies** "react": "^16.8.3", "react-native-webview": "^7.0.1"
