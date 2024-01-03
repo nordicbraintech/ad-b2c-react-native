@@ -306,6 +306,7 @@ describe.only("ADService", () => {
       expect(props.setTokenState).toHaveBeenCalledWith({
         tokenType: fetchResult.token_type,
         access: fetchResult.access_token,
+        id: "test id token", 
         refresh: fetchResult.refresh_token,
         expiresOn: fetchResult.expires_on.toString()
       });
