@@ -1,10 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`EditView renders correctly 1`] = `
-<WebView
+<ForwardRef
   appId="testAppId"
-  cacheEnabled={true}
-  javaScriptEnabled={true}
   loginPolicy="testLoginPolicy"
   onError={[Function]}
   onFail={[MockFunction]}
@@ -27,6 +25,5 @@ exports[`EditView renders correctly 1`] = `
   }
   startInLoadingState={true}
   tenant="TestTenant"
-  useSharedProcessPool={true}
 />
 `;
