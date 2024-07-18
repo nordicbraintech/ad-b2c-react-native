@@ -69,7 +69,7 @@
     "react": "^16.13.1",
     "react-addons-test-utils": "^15.6.2",
     "react-dom": "^16.13.1",
-    "react-native": "^0.63.4",
+    "react-native": "^0.72.6",
     "react-native-webview": "^11.13.0",
     "react-test-renderer": "^16.13.1",
     "tern": "^0.24.3"
